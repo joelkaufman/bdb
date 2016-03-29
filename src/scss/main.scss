@@ -1,0 +1,25 @@
+$icon-font-path:"/libs/bootstrap-sass/assets/fonts/bootstrap/";
+@import "../../app/libs/bootstrap-sass/assets/stylesheets/bootstrap";
+
+
+.todo .list-group-item{
+  padding: 10px;
+  
+  .panel-title{
+    position: relative;
+  }
+
+  .btn-edit{
+    margin-left: 10px;
+  }
+
+  .tags{
+    position: absolute;
+    right: -7px;
+    top:-3px;
+  }
+  .label{
+    margin-left: 4px;
+  }
+
+}
