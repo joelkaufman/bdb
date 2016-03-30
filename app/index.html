@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>My Web Page</title>
+    <title>Todo</title>
     <link rel="stylesheet" href="/libs/ui-select/dist/select.min.css" />
     <link rel="stylesheet" href="/css/main.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,35 +9,29 @@
 
 <body ng-app="app">
 
+    <div class="container">
 
-<div class="container">
+        <br>
+        <ul class="list-group todo" ng-controller="todo">
+            <li class="list-group-item">
+                <ui-select ng-model="selected.filters" multiple="true" on-select="todo.filterBy(selected.filters)" on-remove="todo.filterBy(selected.filters)" search-enabled="true">
 
-    <br>
-    <ul class="list-group todo" ng-controller="todo">
-        <li class="list-group-item">
-            <ui-select 
-                ng-model="selected.filters"
-                multiple="true"
-                on-select="todo.filterBy(selected.filters)"
-                on-remove="todo.filterBy(selected.filters)"
-                search-enabled="true">
+                    <ui-select-match>
+                        {{$item}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="tag in (todo.tags | filter: $select.search)">
+                        <span ng-bind="tag"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </li>
 
-                <ui-select-match>
-                    {{$item}}
-                </ui-select-match>
-                <ui-select-choices repeat="tag in (todo.tags | filter: $select.search)">
-                    <span ng-bind="tag"></span>
-                </ui-select-choices>
-            </ui-select>
-        </li>
+            <li class="list-group-item">
 
-        <li class="list-group-item">
+                <div ng-repeat="item in todo.items" ng-init="mode = { edit:false}">
 
-            <div ng-repeat="item in todo.items" ng-init="mode = { edit:false}">
-
-                <div  class="panel panel-default" ng-if="mode.edit == false" >
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
+                    <div class="panel panel-default" ng-if="mode.edit == false">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
                             {{ item.title }}
                             <div class="pull-right tags">
                                 <span ng-repeat="tag in item.tags" class="label label-info">{{tag}}</span>
@@ -45,50 +39,50 @@
                             </div>
 
                         </h3>
+                        </div>
+                        <div class="panel-body" ng-bind-html="item.text"> </div>
                     </div>
-                    <div class="panel-body" ng-bind-html="item.text"> </div>
+
+                    <div class="panel panel-default" ng-if="mode.edit == true">
+                        <div class="panel-body">
+                            <form>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Title" ng-model="item.title">
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="3" ng-model="item.text"></textarea>
+                                </div>
+
+                                <ui-select ng-model="item.tags" tagging on-select="editTags()" on-remove="editTags()" tagging-label="" multiple="true" search-enabled="true">
+                                    <ui-select-match>
+                                        {{$item}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="tag in todo.tags ">
+                                        <span ng-bind="tag"></span>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <br>
+                                <button type="submit" class="btn btn-success pull-right" ng-click="mode.edit = false">Save</button>
+
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="panel panel-default" ng-if="mode.edit == true">
-                    <div class="panel-body">
-                        <form>
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Title" ng-model="item.title">
-                            </div>
-                            <div class="form-group">
-                                <textarea class="form-control" rows="3" ng-model="item.text"></textarea>
-                            </div>
-
-                            <ui-select ng-model="item.tags" tagging on-select="editTags()" on-remove="editTags()" tagging-label=""  multiple="true"  search-enabled="true">
-                                <ui-select-match>
-                                    {{$item}}
-                                </ui-select-match>
-                                <ui-select-choices repeat="tag in todo.tags ">
-                                    <span ng-bind="tag"></span>
-                                </ui-select-choices>
-                            </ui-select>
-                            <br>
-                          <button type="submit" class="btn btn-success pull-right" ng-click="mode.edit = false">Save</button>
-
-                        </form>
-                    </div>
+                <div ng-if="! todo.items.length" class="text-center">
+                    <div class="alert alert-info text-center" role="alert">No Items</div>
                 </div>
+            </li>
+        </ul>
+    </div>
 
-            </div>
-
-            <div ng-if="! todo.items.length">
-                no items
-            </div>
-        </li>
-    </ul>
-</div>
-
-<script src="/js/dev.js" type="text/javascript"></script>
-<script src="/libs/angular/angular.js"></script>
-<script src="/libs/angular-sanitize/angular-sanitize.js"></script>
-<script src="libs/ui-select/dist/select.min.js"></script>
-<script src="js/app.js"></script>
-<script src="api.js"></script>
+    <script src="/js/dev.js" type="text/javascript"></script>
+    <script src="/libs/angular/angular.js"></script>
+    <script src="/libs/angular-sanitize/angular-sanitize.js"></script>
+    <script src="libs/ui-select/dist/select.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="api.js"></script>
 
 </body>
 

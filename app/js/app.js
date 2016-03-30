@@ -1,7 +1,4 @@
-/**
- * Created by relieve on 3/23/16.
- */
-(function(){
+(function(ng, window, undefined){
     'use strict';
 
     Array.prototype.unique = function() {
@@ -18,8 +15,7 @@
     };
 
 
-
-    var app = angular.module('app', ['ui.select', 'ngSanitize']);
+    var app = ng.module('app', ['ui.select', 'ngSanitize']);
     
     app.factory('todo', function($q, $http){ 
 
@@ -33,14 +29,12 @@
         todo.prototype.getAllTags = function() {
             var tags = [];
 
-            angular.forEach(this.items, function (val, key) {
+            ng.forEach(this.items, function (val, key) {
                 tags = tags.concat(val.tags);
             });
 
             return tags.unique();
         }
-
-    
 
         todo.prototype.filterBy = function(filters){
 
@@ -69,7 +63,6 @@
         $scope.editTags = function(){
             $scope.todo.tags = todo.getAllTags();
         }
-  
-    })
+    });
 
-}());
+}(angular, window));
