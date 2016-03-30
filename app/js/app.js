@@ -21,28 +21,28 @@
 
     var app = angular.module('app', ['ui.select', 'ngSanitize']);
     
-    app.factory('todo', function($q, $http){
-        
-        function todo(){}
+    app.factory('todo', function($q, $http){ 
 
-        function getAllTags(todos) {
+        var cache  = window.todo;
+
+        function todo(){
+            this.items = cache;
+            this.tags = this.getAllTags()
+        }
+
+        todo.prototype.getAllTags = function() {
             var tags = [];
 
-            angular.forEach(todos, function (val, key) {
+            angular.forEach(this.items, function (val, key) {
                 tags = tags.concat(val.tags);
             });
 
             return tags.unique();
         }
 
-        todo.get = function(){
-            return {
-                items: window.todo,
-                tags:getAllTags(window.todo)
-            }
-        };
+    
 
-        todo.filterBy = function(filters){
+        todo.prototype.filterBy = function(filters){
 
             function tagFilter(item)
             {
@@ -52,26 +52,22 @@
                 return true;
             }
 
-            var data = this.get();
-            data.items =  data.items.filter(tagFilter);
-
-            return data;
-
+            this.items = cache.filter(tagFilter);
         };
 
-        return todo;
+        return new todo();
     });
 
 
     app.controller('todo', function($scope, todo){
+        $scope.todo = todo;
+
         $scope.selected  = {
             filters: []
         };
 
-        $scope.todo = todo.get();
-
-        $scope.filterBy = function(item){
-            $scope.todo = todo.filterBy($scope.selected.filters);
+        $scope.editTags = function(){
+            $scope.todo.tags = todo.getAllTags();
         }
   
     })

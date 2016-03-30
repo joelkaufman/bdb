@@ -15,7 +15,13 @@
     <br>
     <ul class="list-group todo" ng-controller="todo">
         <li class="list-group-item">
-            <ui-select ng-model="selected.filters"  multiple="true" on-select="filterBy($item)" on-remove="filterBy($item)" search-enabled="true">
+            <ui-select 
+                ng-model="selected.filters"
+                multiple="true"
+                on-select="todo.filterBy(selected.filters)"
+                on-remove="todo.filterBy(selected.filters)"
+                search-enabled="true">
+
                 <ui-select-match>
                     {{$item}}
                 </ui-select-match>
@@ -53,7 +59,7 @@
                                 <textarea class="form-control" rows="3" ng-model="item.text"></textarea>
                             </div>
 
-                            <ui-select ng-model="item.tags" tagging tagging-label=""  multiple="true"  search-enabled="true">
+                            <ui-select ng-model="item.tags" tagging on-select="editTags()" on-remove="editTags()" tagging-label=""  multiple="true"  search-enabled="true">
                                 <ui-select-match>
                                     {{$item}}
                                 </ui-select-match>
